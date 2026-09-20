@@ -1,0 +1,103 @@
+{
+  "id": "case-052",
+  "title": "Backfilled ticket: scanner wifi in bay 4 — disagrees with the seeded label",
+  "scenarios": [
+    "legacy",
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "Scanner tablet keeps dropping wifi in bay 4"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Scanner tablet keeps dropping wifi in bay 4",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Scanner tablet keeps dropping wifi in bay 4. Reported by dan.osei@northgate.example.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P3",
+      "subcategory": "wifi drops in one area",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "Whether other scanners in bay 4 drop too, or only this one"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "VPN will not connect (GlobalProtect)"
+      ]
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [
+        "escalate"
+      ],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "others",
+          "what": "Asks whether other devices in bay 4 are affected",
+          "any_of": [
+            "other (scanners|tablets|devices)",
+            "only (this|yours|one)"
+          ]
+        }
+      ],
+      "must_not_include": [],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The seeded history records a human correction to hardware/P2 for this ticket. That label was written by the seed script, not reviewed, and the text does not decide it: one tablet in one bay could be the device or the access point. Labelled network_connectivity/P3 with a question that settles it. The reviewer decides; either way, do not trust a label because it is already in the database."
+}

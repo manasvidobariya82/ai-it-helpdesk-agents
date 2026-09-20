@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hd/core": ["packages/core/src/index.ts"],
+      "@hd/core/*": ["packages/core/src/*"],
+      "@hd/llm": ["packages/llm/src/index.ts"],
+      "@hd/llm/*": ["packages/llm/src/*"],
+      "@hd/rag": ["packages/rag/src/index.ts"],
+      "@hd/tools": ["packages/tools/src/index.ts"],
+      "@hd/agent-helpdesk": ["packages/agent-helpdesk/src/index.ts"],
+      "@hd/agent-ops": ["packages/agent-ops/src/index.ts"],
+      "@hd/eval": ["packages/eval/src/index.ts"],
+      "@hd/eval/*": ["packages/eval/src/*"]
+    },
+    "jsx": "preserve",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/test/**/*.ts",
+    "apps/worker/src/**/*.ts",
+    "apps/web/**/*.ts",
+    "apps/web/**/*.tsx",
+    "scripts/**/*.ts"
+  ],
+  "exclude": ["node_modules", "**/node_modules", "**/.next", "**/dist"]
+}

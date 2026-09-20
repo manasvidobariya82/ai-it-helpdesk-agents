@@ -1,0 +1,101 @@
+{
+  "id": "case-020",
+  "title": "Clarifying answer reveals the VPN certificate error",
+  "scenarios": [
+    "multi_turn",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "VPN not working",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "VPN isn't working this morning, so I can't get to anything internal from home.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "message",
+        "visibility": "public",
+        "body": "What error message does GlobalProtect show when it fails to connect?\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "It says \"Required client certificate not found\". My home wifi is fine otherwise.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 3,
+    "clarify_rounds_so_far": 1
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "VPN down, cause unknown at opening",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "The error message GlobalProtect shows"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The answer names the one error the runbook says only IT can fix: the certificate has to be reissued.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Triage labels describe the opening message (G2): VPN down for a remote worker, P2, and the error is the missing fact. After turn 3 the fix is a certificate reissue, which is IT's (G6). Today the reply routes to a person anyway, so the current system should pass; a future agent that reads replies must not answer this one itself."
+}

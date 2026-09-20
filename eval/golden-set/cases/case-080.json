@@ -1,0 +1,83 @@
+{
+  "id": "case-080",
+  "title": "Backfilled ticket: guest wifi for visiting auditors",
+  "scenarios": [
+    "legacy",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "Guest wifi for the auditors"
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Guest wifi for the auditors",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Guest wifi access needed for three auditors on Thursday. Reported by\ndan.osei@northgate.example.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P4",
+      "subcategory": "guest wifi request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "VPN will not connect (GlobalProtect)"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Guest access is granted by a person; no runbook and no whitelisted tool covers it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "A backfilled record (D4): one line, written by whatever system held it before, with the requester named in the body because that is how the copy reads. Nothing is broken and nobody is blocked, so P4. It is in the set to check that a legacy ticket with no conversation to speak of still classifies sensibly rather than falling into 'other' - and that the VPN runbook, the only document with 'wifi' near 'access' in it, stays under the support floor."
+}

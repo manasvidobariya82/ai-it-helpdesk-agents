@@ -1,0 +1,82 @@
+{
+  "id": "case-011",
+  "title": "Every scanner drops wifi in one warehouse bay",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Wifi dropping in bay 4 - all the scanners",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "All three scanner tablets keep dropping off the wifi in bay 4 since Monday. They're fine in the other bays. We're having to walk to bay 3 to sync, which is slowing picking right down.\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "wifi coverage in one area",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "VPN will not connect (GlobalProtect)"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "An access-point or coverage fault needs someone on site.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Several devices failing in one place and fine elsewhere points at the access point, not the tablets, so network_connectivity. Several people are slowed but can work by walking to bay 3; P2 is a judgement between the definitions (G1) — reviewer to confirm. The VPN runbook does not apply to warehouse wifi."
+}

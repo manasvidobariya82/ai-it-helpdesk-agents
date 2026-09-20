@@ -1,0 +1,80 @@
+{
+  "id": "case-079",
+  "title": "Nobody on the second floor has a network connection",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Second floor has no network at all",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Nobody up here has any network. Wired and wireless both. It went about twenty\npast and there are fourteen of us sitting doing nothing.\n\nThe ground floor is fine - I walked down and checked.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P1",
+      "subcategory": "floor-wide network outage",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "oncall"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A floor-wide outage is infrastructure work and needs someone on site.",
+      "rules": [
+        "priority_p1"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Service down for multiple people is the first line of the P1 definition, and fourteen idle people with a working floor below them is that (G1). She has already done the diagnosis that matters - it is the floor, not the device. P1 routes to oncall under this tenant's routing table, which is the only case in the set where the expected queue is not tier1 by default."
+}

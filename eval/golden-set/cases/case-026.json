@@ -1,0 +1,117 @@
+{
+  "id": "case-026",
+  "title": "'See screenshot' with nothing else to go on",
+  "scenarios": [
+    "attachment",
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Error when opening Figma",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Getting this error every time I open Figma, see screenshot.\n\nAisha",
+        "attachments": [
+          {
+            "filename": "Screenshot 2026-09-19 at 09.14.02.png",
+            "content_type": "image/png",
+            "shows": "Figma dialog: 'Your Professional seat has been removed. Contact your team admin to request access.'"
+          }
+        ],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "software",
+      "priority": "P3",
+      "subcategory": "Figma error, text in a screenshot",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "The error text shown in the screenshot"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "error-text",
+          "what": "Asks for the error text",
+          "any_of": [
+            "error",
+            "message",
+            "wording",
+            "what (does it|it) say"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-guess",
+          "what": "Claims to know what the screenshot says",
+          "any_of": [
+            "(screenshot|image) (shows|says)",
+            "\\bseat\\b",
+            "licen[cs]e"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The agent sees a file name, not the image. Everything useful is in the picture, so the honest move is to ask for the text; guessing 'licence' from the app name is inventing an error the prompt forbids. She can work on other things: P3."
+}

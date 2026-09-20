@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A second push to the same branch makes the first run's answer irrelevant.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Typecheck and the tests that need nothing running. Fast, and it is where
+  # the structural authorization checks live — a repository function that
+  # forgets its TenantContext fails here in under a minute.
+  static:
+    name: Typecheck and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+  # The cross-tenant attack tests. These need a real Postgres, because the thing
+  # being tested is the `where` clause: a mocked repository agrees with whatever
+  # the code does and proves nothing.
+  isolation:
+    name: Tenant isolation
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: helpdesk
+          POSTGRES_PASSWORD: helpdesk
+          POSTGRES_DB: helpdesk
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U helpdesk -d helpdesk"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+      # The agent pipeline enqueues through BullMQ. Without Redis the enqueue
+      # path is exercised only in its degraded form, which is not what that
+      # test is for.
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6380:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgres://helpdesk:helpdesk@localhost:5433/helpdesk
+      REDIS_URL: redis://localhost:6380
+      # Deterministic in CI so a failure is reproducible. Never a real key.
+      CREDENTIALS_KEY: ci-only-credentials-key-not-a-secret
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Migrate
+        run: npm run db:migrate
+
+      # REQUIRE_DB turns the suite's own "no database, skip quietly" guard into
+      # a hard failure. Without it, a job whose Postgres service failed to start
+      # would go green having proved nothing — which is worse than a red build,
+      # because it looks like a green one.
+      - name: Cross-tenant attack tests
+        env:
+          REQUIRE_DB: "1"
+        run: npx vitest run packages/core/test/isolation.test.ts --reporter=verbose
+
+      - name: Agent pipeline against a real database
+        run: npx vitest run packages/agent-helpdesk/test/pipeline.integration.test.ts
+
+      # The delivery lifecycle: claim, defer, dead-letter, reclaim a message a
+      # stopped worker left in flight, and reconcile a bounce that arrives
+      # afterwards. All of it is status predicates and parameter types, which
+      # is to say none of it can be proved without a database.
+      - name: Outbound mail against a real database
+        run: npx vitest run packages/core/test/outbound.integration.test.ts
+
+      # Notifications: tenant policy, individual opt-outs, deduplication, who
+      # counts as "the queue", and the SLA warning sweep. All queries, and one
+      # of them asserts that a manager can cause a notification without
+      # holding the permission that queues mail.
+      - name: Notifications against a real database
+        run: npx vitest run packages/core/test/notifications.integration.test.ts
+
+      # Everything that happens to a ticket after its first resolution: the
+      # reopen clears `resolved_at`, bulk actions go through `setStatus`, a
+      # reply through the portal still reopens, and the follow-up sweep closes
+      # what it should. Each one was a bug that only a real database showed.
+      - name: Ticket lifecycle against a real database
+        run: >-
+          npx vitest run
+          packages/core/test/lifecycle.integration.test.ts
+          packages/agent-helpdesk/test/followup.integration.test.ts

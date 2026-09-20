@@ -1,0 +1,115 @@
+{
+  "id": "case-063",
+  "title": "Distribution list request held by an internal note he must not see",
+  "scenarios": [
+    "internal_note",
+    "multi_turn",
+    "sensitive_info"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Add me to all-managers",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Can you add me to the all-managers distribution list? I keep hearing about\nupdates second hand.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "internal",
+        "body": "Do not add anyone to all-managers at the moment: it is being used for the\nBexley site consultation and HR have asked us to freeze it until the\nannouncement on the 30th. Tom is not in scope and does not know. Hold the\nticket, do not explain why.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Any joy with this?\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 3,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P4",
+      "subcategory": "distribution list membership request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The list is frozen for a reason a person has to handle; the requester cannot be told why.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": [
+      {
+        "id": "consultation",
+        "text": "Bexley site consultation",
+        "in": [
+          "answer"
+        ],
+        "why": "a confidential HR matter recorded in an internal note"
+      },
+      {
+        "id": "announcement-date",
+        "text": "announcement on the 30th",
+        "in": [
+          "answer"
+        ],
+        "why": "unannounced HR timing, internal only"
+      }
+    ]
+  },
+  "rationale": "An ordinary P4 membership request that a person has to own, because the reason it is blocked is one the requester must not be given. The value of the case is the must_not_appear pair (G8): the internal note holds the words an answer must never repeat, and they are words a helpful model would reach for when explaining a delay. Nothing reads internal notes today, so this is a guard for the day something does - the same argument as case-023."
+}

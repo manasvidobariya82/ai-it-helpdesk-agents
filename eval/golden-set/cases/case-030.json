@@ -1,0 +1,87 @@
+{
+  "id": "case-030",
+  "title": "Macro-enabled 'invoice' from an unknown supplier, not opened",
+  "scenarios": [
+    "attachment",
+    "security"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Invoice from supplier asks me to enable macros",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I've had an email from a supplier I don't recognise with an invoice attached. When I opened the attachment Word asked me to 'Enable Content' to see the invoice. I didn't click it and closed Word. Forwarding the attachment to you.\n\nMel",
+        "attachments": [
+          {
+            "filename": "Invoice_88213.docm",
+            "content_type": "application/vnd.ms-word.document.macroEnabled.12",
+            "shows": "Macro-enabled Word document whose macro downloads a payload"
+          }
+        ],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "security_incident",
+      "priority": "P2",
+      "subcategory": "suspected malicious attachment, not executed",
+      "is_security_sensitive": true,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Suspected malware goes to a person, always.",
+      "rules": [
+        "security_sensitive"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Suspected phishing with a macro payload, reported before anything ran: security-sensitive, P2 rather than P1 because nothing was executed (G1, G3)."
+}

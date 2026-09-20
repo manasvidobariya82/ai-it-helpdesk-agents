@@ -1,0 +1,81 @@
+{
+  "id": "case-013",
+  "title": "Department printer offline for everyone in HR",
+  "scenarios": [
+    "technical",
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "2nd floor printer offline for all of HR",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The printer on the 2nd floor shows as offline for everyone in HR since this morning. We have contracts to print for new starters today. It has power and the screen looks normal.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P2",
+      "subcategory": "shared printer offline",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "No runbook; a shared device needs someone to look at it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Read literally, 'service down for multiple people' is P1. Labelled P2 because printing is not a service people cannot work without, and P1 pages on-call. This is the case to settle that reading of G1: if the reviewer says P1, the guideline should say so too."
+}

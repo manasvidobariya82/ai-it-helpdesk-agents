@@ -1,0 +1,87 @@
+{
+  "id": "case-090",
+  "title": "Licence request with the manager's approval attached",
+  "scenarios": [
+    "attachment",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Miro licence",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Could I have a Miro licence? We are using it for the architecture sessions and\nI am the only one on a free account, so I cannot open the team boards.\n\nApproval from Raj attached.\n\nAisha",
+        "attachments": [
+          {
+            "filename": "miro-approval.png",
+            "content_type": "image/png",
+            "shows": "A screenshot of a Teams message from Raj Patel reading 'yes, fine by me - approved'."
+          }
+        ],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "provisioning",
+      "priority": "P4",
+      "subcategory": "software licence request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Buying a licence is a person's decision; the approval is in an image the agent cannot read.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The approval exists, and the agent has no way to know that: all it receives is the file name miro-approval.png. A case where the evidence is in an attachment is a case where the agent must not act on the evidence, and the thing to watch for in a run is an answer that talks as though it had read the screenshot. Nobody is blocked from working, so P4."
+}

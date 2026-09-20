@@ -1,0 +1,121 @@
+{
+  "id": "case-070",
+  "title": "'The app crashed' with no app named",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "It crashed",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The app crashed again. Can someone look?\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "software",
+      "priority": "P3",
+      "subcategory": "unspecified application crash",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "Which application it is",
+        "What you were doing when it closed",
+        "Any error message it showed"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "which-app",
+          "what": "Ask which application",
+          "any_of": [
+            "which (app|application|programme|program)",
+            "what (app|application)"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-guess",
+          "what": "Guesses at an application the ticket never names",
+          "any_of": [
+            "outlook",
+            "teams",
+            "excel",
+            "chrome"
+          ]
+        },
+        {
+          "id": "no-steps",
+          "what": "Offers steps before knowing what crashed",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s",
+            "restart"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [
+        "One message, and it asks for the three facts rather than for 'more detail'"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "'Again' says there is history and the ticket still names nothing actionable (G7). The must_not_include list is the interesting half: the temptation is to guess Outlook, because most tickets are Outlook, and a guess dressed as a question wastes the one clarifying round the tenant allows (G5). He is working, so P3."
+}

@@ -1,0 +1,74 @@
+{
+  "id": "case-097",
+  "title": "Delivery failure notice bounced into the queue",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/09-bounce-undeliverable.eml"
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": null,
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Undeliverable: Re: your ticket",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Delivery has failed to these recipients or groups:\n\nj.whitmore@northgate.example\nThe email address you entered could not be found. Please check the recipient's\naddress and try again.\n\nDiagnostic information for administrators:\nRemote server returned '550 5.1.10 RESOLVER.ADR.RecipientNotFound'",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "other",
+      "priority": "P4",
+      "subcategory": "bounce notification",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A bounce is a symptom of an earlier ticket, not a ticket; a person reconciles it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The second noise shape, and the harder of the two: a bounce carries an error code, a recipient and diagnostic text, so it reads like a technical ticket and a classifier can find a confident email_collab label in it. It is not one - it is the tail of a reply the desk sent to a mailbox that no longer exists, and the right outcome is that somebody joins it back up to the ticket it came from."
+}

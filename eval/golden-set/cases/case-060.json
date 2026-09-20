@@ -1,0 +1,130 @@
+{
+  "id": "case-060",
+  "title": "Teams audio dies a few minutes into every call until Teams is restarted",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Teams audio drops out after a few minutes",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Every call this week goes the same way: fine for the first few minutes, then I\nstop hearing anyone. They can still hear me. If I quit Teams and reopen it, it\nworks again for a while.\n\nThe headset is fine - music plays through it all day without a problem.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams audio drops mid-call",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Teams call audio problems"
+      ],
+      "acceptable": [],
+      "irrelevant": [
+        "Laptop running slowly"
+      ]
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "cache",
+          "what": "Quit Teams entirely and clear the Teams cache folder",
+          "any_of": [
+            "teams.{0,30}cache",
+            "%appdata%"
+          ]
+        },
+        {
+          "id": "test-call",
+          "what": "Run the test call and check which devices are selected",
+          "any_of": [
+            "test call"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-mac-path",
+          "what": "Gives a macOS cache path; she is on Windows",
+          "any_of": [
+            "~/library",
+            "/users/"
+          ]
+        },
+        {
+          "id": "no-outage",
+          "what": "Blames a Microsoft outage on a single user's calls",
+          "any_of": [
+            "service health",
+            "microsoft 365 (outage|incident)",
+            "known outage"
+          ]
+        }
+      ],
+      "cites": [
+        "Teams call audio problems"
+      ],
+      "characteristics": [
+        "Names the Windows cache path, because she is on a Windows laptop",
+        "Does not send her to buy a headset: the headset demonstrably works"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Restarting the client fixes it for a while, which is the cache step of the Teams runbook, and the headset works outside Teams so the device selection is a check rather than the cause. She can still work, so P3 (G1). The general 'laptop running slowly' runbook shares 'after a few minutes' and 'restart' and would send her to Task Manager instead (G10). She is on the Windows laptop on record, so the Windows path in the runbook is the right one to quote - the mirror of case-032, where the same path was wrong."
+}

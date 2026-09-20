@@ -1,0 +1,44 @@
+{
+  "name": "helpdesk-platform",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace @hd/web",
+    "dev:worker": "npm run dev --workspace @hd/worker",
+    "build": "npm run build --workspace @hd/web",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/migrate.ts --reset && tsx scripts/seed.ts",
+    "kb:ingest": "tsx scripts/ingest-kb.ts",
+    "demo": "tsx scripts/demo.ts",
+    "eval": "tsx scripts/eval.ts",
+    "eval:score": "tsx scripts/eval.ts score",
+    "eval:export": "tsx scripts/eval.ts export",
+    "intake:drop": "tsx scripts/drop-eml.ts",
+    "conversations:backfill": "tsx scripts/backfill-conversations.ts",
+    "setup": "npm run db:up && npm run db:migrate && npm run db:seed && npm run kb:ingest",
+    "bench:intake": "tsx scripts/bench-intake.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}

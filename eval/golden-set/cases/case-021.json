@@ -1,0 +1,98 @@
+{
+  "id": "case-021",
+  "title": "Runbook steps did not work, and colleagues now have it too",
+  "scenarios": [
+    "multi_turn"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Teams call audio cuts out",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "My audio cuts out on Teams calls, people lose me for a few seconds at a time. I'm in the office using the laptop's built-in mic.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "message",
+        "visibility": "public",
+        "body": "1. In Teams, open Settings, then Devices, and run \"Make a test call\".\n2. Check the speaker and microphone selected there.\n3. If it only happens on wifi, move to the 5GHz network or connect by cable.\n4. Quit Teams, clear its cache, and reopen it.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Tried all of that including clearing the cache — no change. And two others on my team say the same thing is happening on their calls.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 3,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams audio drops",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Teams call audio problems"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The runbook fix failed, and several people on the same calls is what the runbook calls a service issue.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "At the opening this is a plain runbook case (P3). By turn 3 the runbook's own escalation rule applies: several people at once is a service problem, not a device one. Sending the same steps again would be the false-resolve loop the follow-up check exists to catch."
+}

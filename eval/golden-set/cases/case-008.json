@@ -1,0 +1,80 @@
+{
+  "id": "case-008",
+  "title": "VPN client certificate missing — the runbook says IT must reissue",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/06-vpn-cert.eml"
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "GlobalProtect: \"Required client certificate not found\"",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Hi,\n\nVPN stopped connecting this morning. Error is \"Required client certificate not\nfound\". I've tried disable/enable and a full restart, and I'm on my home wifi\nwhich is otherwise fine. Portal is set to vpn.northgate.example.\n\nI'm working from home today so I can't get to anything internal until this is\nback.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "VPN client certificate expired",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The runbook says a missing client certificate needs IT to reissue it. A reply would resolve the ticket with the fix still undone.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "She has already done steps 1–4 and quotes step 5's error exactly. Working from home and cut off: P2. The only fix is a certificate reissue by IT, so a person has to own it (G6). The decision branch has no rule for 'the runbook says IT must act': with runbook support it chooses send_reply and resolves the ticket, so expect the policy check to disagree here. That disagreement is the finding, not a label error."
+}

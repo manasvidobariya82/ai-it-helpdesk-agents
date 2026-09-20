@@ -1,0 +1,118 @@
+{
+  "id": "case-005",
+  "title": "GlobalProtect stuck connecting behind a hotel captive portal",
+  "scenarios": [
+    "straightforward",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "GlobalProtect stuck on Connecting at the hotel",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I'm at a hotel for the client workshop and GlobalProtect just sits on 'Connecting…'. I can't reach anything internal. The hotel wifi made me accept terms on a web page when I joined.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "VPN blocked by captive portal",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "captive-portal",
+          "what": "Get past the hotel's sign-in page first: confirm a browser loads a normal website",
+          "any_of": [
+            "browser",
+            "captive",
+            "web ?(site|page)"
+          ]
+        },
+        {
+          "id": "toggle",
+          "what": "Disable GlobalProtect, wait, then enable it",
+          "any_of": [
+            "disable"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-cert",
+          "what": "Says the device certificate has expired; nothing points to that",
+          "any_of": [
+            "certificate (has )?expired",
+            "reissue"
+          ]
+        }
+      ],
+      "cites": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Remote and cut off from everything internal, with no workaround: P2 (G1). Step 2 of the VPN runbook is the captive-portal case she describes. P2 does not stop a runbook reply; only P1 does."
+}

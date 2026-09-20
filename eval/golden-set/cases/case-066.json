@@ -1,0 +1,120 @@
+{
+  "id": "case-066",
+  "title": "Everything crawls because Windows Update is mid-download",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Laptop unusable this morning",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The laptop is nearly unusable today. Fan going constantly, everything takes an\nage. It started after I turned it on this morning - it had been off since\nFriday.\n\nThere is a spinning thing in the system tray about updates, if that matters.\nDisk is only half full.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "update in progress consuming the disk",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Laptop running slowly"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "update-in-progress",
+          "what": "An update mid-download consumes the disk and makes everything crawl; let it finish",
+          "any_of": [
+            "windows update",
+            "update (is )?(in progress|mid-?download|downloading)"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-disk",
+          "what": "Sends her to clear disk space she has already said is half free",
+          "any_of": [
+            "recycle bin",
+            "empty (the |your )?downloads"
+          ]
+        },
+        {
+          "id": "no-refresh",
+          "what": "Raises a hardware refresh for a four-day-old symptom",
+          "any_of": [
+            "hardware refresh",
+            "new laptop"
+          ]
+        }
+      ],
+      "cites": [
+        "Laptop running slowly"
+      ],
+      "characteristics": [
+        "Explains the cause rather than listing the whole runbook",
+        "Says what to expect: it settles when the update finishes"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Step 4 of the runbook, and she has already ruled out steps 1 and 2 herself - the machine was off all weekend so it has just restarted, and the disk is half empty. Annoying but she can work, so P3. The case exists because the runbook's first two steps are the ones a model reaches for by default, and here they are both already answered in the ticket."
+}

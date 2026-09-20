@@ -1,0 +1,81 @@
+{
+  "id": "case-093",
+  "title": "VIP asks for a second laptop to keep at home",
+  "scenarios": [
+    "vip",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Greg Lin",
+      "email": "greg.lin@northgate.example",
+      "department": "Executive",
+      "role": "Managing Director",
+      "vip": true
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0002, last seen 2026-09-19 07:40)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Second laptop for the house",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I am working from the house on Fridays now and I would rather not carry the\nmachine back and forth. Can we get a second one set up to live there?\n\nNo hurry, next month is fine.\n\nGreg",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "provisioning",
+      "priority": "P4",
+      "subcategory": "additional equipment request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Tenant policy routes VIP requesters straight to a person.",
+      "rules": [
+        "vip_requester"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "A P4 request with no urgency, nothing broken and nothing missing, and it escalates for one reason only: vip_always_human (G5). It is the plainest vip_requester case in the set - the others carry a second reason, a missing runbook or a security flag, which makes them weaker evidence that the VIP rule is what fired. Note that being a VIP does not raise the priority: he says next month is fine, and it is P4 (G1)."
+}

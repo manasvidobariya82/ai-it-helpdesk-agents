@@ -1,0 +1,122 @@
+{
+  "id": "case-074",
+  "title": "Reports failing during the scheduled reporting upgrade",
+  "scenarios": [
+    "known_incident"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0920-RPT",
+        "priority": "P2",
+        "subject": "Reporting service unavailable during the scheduled upgrade"
+      }
+    ],
+    "subject": "Sales reports all error",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Every report I run comes back with 'the reporting service is unavailable'. I\nwanted the pipeline numbers for the eleven o'clock.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "software",
+      "priority": "P3",
+      "subcategory": "reporting unavailable",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": "INC-0920-RPT",
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "link_incident",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "known_incident"
+      ]
+    },
+    "answer": {
+      "kind": "incident_ack",
+      "must_include": [
+        {
+          "id": "tracking",
+          "what": "Says it is already known and being tracked",
+          "any_of": [
+            "already tracking",
+            "known issue",
+            "already aware",
+            "planned"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-steps",
+          "what": "Troubleshoots a planned outage",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s",
+            "clear.{0,15}cache",
+            "restart"
+          ]
+        },
+        {
+          "id": "no-eta",
+          "what": "Invents a completion time the incident does not state",
+          "any_of": [
+            "by \\d+ ?(am|pm)",
+            "within (the )?(next )?\\d+ (minutes|hours)"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The incident here is a planned upgrade rather than a fault, which is the reason to have it: an acknowledgement is the whole of the right answer, and there is nothing to diagnose. He has yesterday's numbers to fall back on, so P3 under a P2 parent (G1, G11)."
+}

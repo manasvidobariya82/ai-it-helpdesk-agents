@@ -1,0 +1,139 @@
+{
+  "id": "case-076",
+  "title": "Draft told the Leeds visitor to reinstall; the guest wifi is simply not supported",
+  "scenarios": [
+    "draft_edited",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "VPN won't connect from the Leeds office",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Up in Leeds for the day and I cannot get GlobalProtect to connect. It sits on\n'Connecting' and gives up. I am on the guest wifi, which is what reception gave\nme.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "draft",
+        "visibility": "internal",
+        "body": "Sorry about that. Please try the following:\n\n1. Right-click GlobalProtect, choose Disable, wait ten seconds, then Enable.\n2. Restart the laptop.\n3. If it still fails, uninstall GlobalProtect and reinstall it from the Company\n   Portal.\n\nThat usually clears it.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The VPN does not work on the guest wifi in the Leeds office - that is expected\nrather than a fault. Join the corporate SSID instead, or tether to your phone,\nand GlobalProtect will connect.\n\nNothing to reinstall.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": 2,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P3",
+      "subcategory": "VPN on an unsupported network",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "known-limit",
+          "what": "Say the Leeds guest wifi is not supported and name the alternative: the corporate SSID or a hotspot",
+          "any_of": [
+            "corporate ssid",
+            "hotspot",
+            "tether"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-reinstall",
+          "what": "Tells him to reinstall a client that is working correctly",
+          "any_of": [
+            "uninstall",
+            "reinstall"
+          ]
+        },
+        {
+          "id": "no-restart",
+          "what": "Sends him round the generic steps when the runbook names this exact situation",
+          "any_of": [
+            "restart (the |your )?(laptop|device|machine)"
+          ]
+        }
+      ],
+      "cites": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "characteristics": [
+        "Says it is expected before saying what to do, so he does not think the laptop is broken",
+        "One alternative network, not a five-step list"
+      ],
+      "reference": "The VPN does not work on the guest wifi in the Leeds office - that is expected\nrather than a fault. Join the corporate SSID instead, or tether to your phone,\nand GlobalProtect will connect.\n\nNothing to reinstall.\n\n— Northgate IT Support"
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The label is what the person sent, not what the agent drafted (G12). The draft was not wrong in general - steps 3 and 4 of the runbook are exactly what it offered - it just skipped the Known limits section, which names this office and this network. He has the corporate SSID available to him, so a workaround exists and it is P3 (G1), though a reviewer who reads 'blocked until somebody tells him' as P2 has a case."
+}

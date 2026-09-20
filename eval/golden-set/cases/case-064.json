@@ -1,0 +1,129 @@
+{
+  "id": "case-064",
+  "title": "Laptop crawling with four gigabytes free",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Laptop is crawling",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The laptop has been painful since I copied the site photos off the camera on\nMonday. Everything takes an age to open. Windows is telling me I have about 4GB\nleft on the C drive, if that is relevant.\n\nI have restarted it twice.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "low disk space",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Laptop running slowly"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "disk-space",
+          "what": "Free disk space: under 10% on the system drive causes exactly this",
+          "any_of": [
+            "disk space",
+            "10 ?%",
+            "free space"
+          ]
+        },
+        {
+          "id": "what-to-clear",
+          "what": "Say what to clear: Downloads and the recycle bin",
+          "any_of": [
+            "downloads",
+            "recycle bin"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-refresh",
+          "what": "Jumps to a hardware refresh, which the runbook puts last and only for old devices",
+          "any_of": [
+            "hardware refresh",
+            "new laptop",
+            "replace(ment)? (the )?(laptop|device)"
+          ]
+        },
+        {
+          "id": "no-restart-again",
+          "what": "Tells him to restart, which he has already done twice",
+          "any_of": [
+            "(please )?restart (your|the) (laptop|device|machine)"
+          ]
+        }
+      ],
+      "cites": [
+        "Laptop running slowly"
+      ],
+      "characteristics": [
+        "Leads with the number he already gave: 4GB free is the cause, not a symptom",
+        "Does not repeat the restart step he has already carried out"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "He has supplied the diagnosis without realising it. Step 2 of the runbook is under 10% free on the system drive, and 4GB on a modern laptop is far under. Slow but working, so P3 (G1). The restart step is already done, which is why a reply that opens with it is a wrong answer even though the runbook opens with it - a reply is judged on this ticket, not on the runbook's running order."
+}

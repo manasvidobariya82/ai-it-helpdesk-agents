@@ -1,0 +1,122 @@
+{
+  "id": "case-001",
+  "title": "Password changed on the laptop, phone Outlook still asks for it",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Outlook on my phone keeps asking for my password",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Hi,\n\nMy password expired this morning and I changed it when the laptop prompted me. The laptop is fine now, but Outlook on my phone keeps asking for my password and won't take the new one.\n\nThanks,\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P3",
+      "subcategory": "cached password on phone after expiry",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "acceptable": [
+        "Account lockout after failed sign-ins"
+      ],
+      "irrelevant": [
+        "Setting up MFA on a new phone"
+      ]
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "phone-signout",
+          "what": "Sign out of Outlook (and Teams) on the phone, then sign back in with the new password",
+          "any_of": [
+            "sign(ing)? (back )?out",
+            "remove (the |your )?(work )?account"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-mfa",
+          "what": "Tells him to reset or re-register MFA",
+          "any_of": [
+            "(reset|re-?register|remove)\\W+(your |the )?(mfa|authenticator|multi-factor)"
+          ]
+        },
+        {
+          "id": "no-reset-again",
+          "what": "Tells him to reset the password again",
+          "any_of": [
+            "reset (your|the) password again"
+          ]
+        }
+      ],
+      "cites": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "characteristics": [
+        "One or two numbered steps; the laptop needs nothing",
+        "Says the phone holds the old password until it signs out"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Step 5 of the password runbook is exactly this: the old password stays cached on mobile until the account signs out and back in. He can work on the laptop, so P3. A routine expiry is not a credential compromise, so not security-sensitive (guideline G3). The MFA runbook would send him down the wrong path."
+}

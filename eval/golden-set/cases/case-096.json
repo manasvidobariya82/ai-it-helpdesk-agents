@@ -1,0 +1,74 @@
+{
+  "id": "case-096",
+  "title": "Out-of-office autoreply opens a ticket",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/08-out-of-office.eml"
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": null,
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Automatic reply: Your ticket has been received",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I am out of the office until 29 September with limited access to email.\n\nFor anything urgent please contact the main switchboard.\n\nThis is an automatic reply.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "other",
+      "priority": "P4",
+      "subcategory": "automatic reply",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Nothing is being asked; somebody at the desk closes it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Queue noise, and it has to be in the set because it is a large share of what actually arrives. There is no request, no requester in the directory and nothing to classify, so the only honest labels are other and P4. Watch for two failures in a run: a confident category drawn from the word 'urgent', and a reply sent to an address that will autoreply again."
+}

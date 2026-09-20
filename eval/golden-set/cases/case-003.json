@@ -1,0 +1,123 @@
+{
+  "id": "case-003",
+  "title": "Robotic Teams audio on a Bluetooth headset at home",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "People say I sound robotic on Teams calls",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "On Teams calls today people keep saying I sound robotic and cut out. I'm using my Jabra bluetooth headset, working from home on wifi. Internet is fine otherwise.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams audio quality, Bluetooth headset",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Teams call audio problems"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "test-call",
+          "what": "Run 'Make a test call' from Teams settings and check the selected devices",
+          "any_of": [
+            "test call"
+          ]
+        },
+        {
+          "id": "hands-free",
+          "what": "Pick the headset's Hands-Free entry, not Stereo",
+          "any_of": [
+            "hands-?free"
+          ]
+        },
+        {
+          "id": "wifi-band",
+          "what": "On wifi, try the 5GHz network or a cable",
+          "any_of": [
+            "5\\s?ghz",
+            "cable",
+            "ethernet"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-office-ssid",
+          "what": "Treats him as being in the Manchester office; he is at home",
+          "any_of": [
+            "manchester"
+          ]
+        }
+      ],
+      "cites": [
+        "Teams call audio problems"
+      ],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The Teams audio runbook covers each symptom: the Bluetooth Hands-Free/Stereo split explains 'robotic', and wifi is the second suspect. Degraded, not blocked: P3. The runbook's Manchester office note does not apply to someone at home."
+}

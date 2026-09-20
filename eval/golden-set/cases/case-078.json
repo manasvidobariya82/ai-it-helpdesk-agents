@@ -1,0 +1,82 @@
+{
+  "id": "case-078",
+  "title": "VPN on a phone, which the runbook does not cover",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "GlobalProtect on my phone",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I have installed GlobalProtect on my phone so I can get at the intranet when I\nam out, and it will not connect - just spins.\n\nThe laptop connects fine on the same wifi.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P3",
+      "subcategory": "VPN client on a mobile device",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "VPN will not connect (GlobalProtect)"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The VPN runbook covers laptops only; mobile devices reach internal apps through the Entra application proxy, which no runbook covers.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The runbook's Scope section says mobile devices use the Entra application proxy and are not covered here, and there is no runbook for that. Following the VPN runbook anyway would have him checking a portal address and restarting a phone to fix a thing that was never going to work (G10). His laptop connects, so he has a workaround: P3 (G1). The third of the scope-exclusion cases, with case-057 and case-065."
+}

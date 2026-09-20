@@ -1,0 +1,95 @@
+{
+  "version": "0.2.0",
+  "label_version": "v1",
+  "status": "draft — 100 cases proposed, none reviewed yet. The set is complete in size and coverage and is waiting on human review; see README.md.",
+  "updated_at": "2026-09-20",
+  "description": "Reviewed golden set for the helpdesk agent: one ticket per case, with the classification, runbook, outcome, answer content and protected text a person has decided are right. Only cases with review.status \"reviewed\" are ground truth. The labelling guidelines the expectations follow are README.md, at label_version v1.",
+  "cases": 100,
+  "targets": {
+    "total": 100,
+    "per_category": 8,
+    "holdout_pct": 30
+  },
+  "kb": {
+    "dir": "db/seed/kb",
+    "docs": [
+      {
+        "file": "account-lockout.md",
+        "title": "Account lockout after failed sign-ins",
+        "sha256": "684e050748a9ced8553472824cfac9d9b771be8ab2b2140cdd10f5d47d2b8202"
+      },
+      {
+        "file": "laptop-slow.md",
+        "title": "Laptop running slowly",
+        "sha256": "fa1b11ccdf2543e17941adc00edc017a0d760d25dc4db447e492007ada8a6f53"
+      },
+      {
+        "file": "mfa-new-phone.md",
+        "title": "Setting up MFA on a new phone",
+        "sha256": "ba0da865c8d483f5c52d0f3e9905d6a0c035997fba65350561488b0431d68fb0"
+      },
+      {
+        "file": "password-reset.md",
+        "title": "Password reset and expiry (Entra ID)",
+        "sha256": "f58f45c28952e740b499584415c20fc867857f4b6ec7dd3d3213380ba36b5ff0"
+      },
+      {
+        "file": "teams-audio.md",
+        "title": "Teams call audio problems",
+        "sha256": "8f444df7bdd6eecfa652464295dca89c692156bbeecf0d82810e6fbfbc8b27c3"
+      },
+      {
+        "file": "vpn-connect.md",
+        "title": "VPN will not connect (GlobalProtect)",
+        "sha256": "b7d6afd887dc44144984ddf66e2ee5be5e89b20dffb40e0abf8bc9236ffe5ef3"
+      }
+    ]
+  },
+  "policy": {
+    "tenant": "Northgate Services",
+    "notes": [
+      "VIP requesters always go to a person (vip_always_human).",
+      "No tool is whitelisted for unattended use, so no case expects the `action` outcome.",
+      "One clarifying round before escalating (max_clarify_rounds 1).",
+      "A runbook counts as support at a similarity of 0.62 or more (kb_support_floor).",
+      "Secrets are scrubbed from the stored body at intake (scrub_secrets_at_rest).",
+      "P1 routes to oncall; everything else to tier1."
+    ],
+    "settings": {
+      "vip_always_human": true,
+      "human_only_departments": [],
+      "auto_action_whitelist": [],
+      "max_clarify_rounds": 1,
+      "kb_support_floor": 0.62,
+      "never_auto_categories": ["security_incident"],
+      "scrub_secrets_at_rest": true,
+      "routing": {
+        "default_queue": "tier1",
+        "escalation_queue": "oncall",
+        "escalate_priorities": ["P1"],
+        "category_queues": {}
+      },
+      "signature": "— Northgate IT Support"
+    }
+  },
+  "changelog": [
+    {
+      "version": "0.2.0",
+      "date": "2026-09-20",
+      "changes": [
+        "46 draft cases added, taking the set to the 100 the P2 gate asks for: every category has at least 9, and each safety flag now has cases on both sides of its line.",
+        "The labelling guidelines the expectations follow are written down for the first time, as README.md, at label_version v1 — G1 to G14, with the rules the earlier rationales cited by number but never defined.",
+        "Gaps the earlier 54 left, now covered: the clarify_exhausted rule and the injection rule had no case that reached them; link_incident had one case; every scope exclusion in the runbooks (warehouse scanners, warehouse tablets, mobile VPN) is now the near miss in a case that must not follow it.",
+        "Still nothing is reviewed. A draft is a proposal whatever wrote it, and the set becomes ground truth one accepted case at a time."
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-09-19",
+      "changes": [
+        "54 draft cases across all eight categories and every scenario: straightforward, technical, ambiguous, multi-turn, internal note, attachment, AI draft edited before sending, sensitive information, backfilled (legacy) tickets, security, destructive, prompt injection, known incident and VIP.",
+        "Expectations drafted by an AI assistant from the runbooks, the triage prompt's priority definitions and decide.ts, without looking at system output. None is ground truth until a person reviews it."
+      ]
+    }
+  ]
+}

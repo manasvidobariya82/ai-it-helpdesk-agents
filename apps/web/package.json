@@ -1,0 +1,26 @@
+{
+  "name": "@hd/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000"
+  },
+  "dependencies": {
+    "@hd/agent-helpdesk": "*",
+    "@hd/core": "*",
+    "@hd/eval": "*",
+    "@hd/llm": "*",
+    "@hd/rag": "*",
+    "@hd/tools": "*",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3"
+  }
+}

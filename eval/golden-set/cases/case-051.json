@@ -1,0 +1,89 @@
+{
+  "id": "case-051",
+  "title": "Backfilled ticket: 'Need a Figma seat'",
+  "scenarios": [
+    "legacy"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "Need a Figma seat"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Need a Figma seat",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Need a Figma seat. Reported by aisha.khan@northgate.example.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "software",
+      "priority": "P4",
+      "subcategory": "licence request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A licence is a purchase with an approver, and the tenant whitelists no licence tool.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": [
+      {
+        "id": "email",
+        "text": "aisha.khan@northgate.example",
+        "in": [
+          "model_input"
+        ],
+        "why": "email addresses are redacted before model calls"
+      }
+    ]
+  },
+  "rationale": "A new-licence request: P4. With an empty action whitelist and no runbook, a person grants it."
+}

@@ -1,0 +1,124 @@
+{
+  "id": "case-002",
+  "title": "Moving Authenticator to a new phone while the old one still works",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "New phone - Authenticator doesn't show my work account",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I've switched to a new iPhone. I installed Microsoft Authenticator on it but my work account isn't there. My old phone still works and is still getting the approval prompts for now, so I'm not locked out. What do I need to do to move it across?\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P4",
+      "subcategory": "move MFA to a new phone, old phone available",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Setting up MFA on a new phone"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "old-phone",
+          "what": "Starts on the old phone: Authenticator, the work account, its settings",
+          "any_of": [
+            "old phone"
+          ]
+        },
+        {
+          "id": "approve-on-old",
+          "what": "Sign in on the new phone and approve the prompt on the old one",
+          "any_of": [
+            "approv\\w*"
+          ]
+        },
+        {
+          "id": "test-signin",
+          "what": "Confirms with a test sign-in at myaccount.microsoft.com",
+          "any_of": [
+            "myaccount\\.microsoft\\.com"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-it-reset",
+          "what": "Says IT has to reset her MFA methods, which is only for a lost phone",
+          "any_of": [
+            "(IT|we) (will|need to|must|can) reset",
+            "reset (your|the) (mfa|authentication) methods"
+          ]
+        }
+      ],
+      "cites": [
+        "Setting up MFA on a new phone"
+      ],
+      "characteristics": [
+        "Uses the 'old phone still available' section, not the 'old phone gone' one"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "She is not blocked and is asking how to do something, so P4. With the old phone in hand this is the runbook's self-service path, not an MFA reset, so neither security-sensitive nor destructive (G3, G4). Sending her to IT for a reset would be the wrong section of the right runbook."
+}

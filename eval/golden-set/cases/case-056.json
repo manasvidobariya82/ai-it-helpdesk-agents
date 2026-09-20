@@ -1,0 +1,131 @@
+{
+  "id": "case-056",
+  "title": "Locked out again an hour after the desk unlocked him",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [
+      "2026-09-20 [resolved] access_identity: Account locked out"
+    ],
+    "incidents": [],
+    "subject": "Locked out again",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "You unlocked me at about nine and I was fine for half an hour. It has just\nlocked me out again. I am typing the same password I have used for weeks and\nit is definitely right - I have it in my password manager.\n\nThis is the second time today.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "repeat lockout from a cached credential",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Account lockout after failed sign-ins"
+      ],
+      "acceptable": [],
+      "irrelevant": [
+        "Password reset and expiry (Entra ID)"
+      ]
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "credential-manager",
+          "what": "Check Windows Credential Manager and remove stale entries for the service",
+          "any_of": [
+            "credential manager"
+          ]
+        },
+        {
+          "id": "phone-apps",
+          "what": "Fully close Outlook and Teams on the phone first",
+          "any_of": [
+            "clos(e|ing) (outlook|teams)",
+            "outlook and teams on (your|the) phone"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-reset",
+          "what": "Tells him to reset a password that is not the problem",
+          "any_of": [
+            "reset (your|the) password",
+            "aka\\.ms/sspr"
+          ]
+        },
+        {
+          "id": "no-blame",
+          "what": "Tells him he is typing it wrong",
+          "any_of": [
+            "typing it (in )?(wrong|incorrectly)",
+            "check (your )?caps lock"
+          ]
+        }
+      ],
+      "cites": [
+        "Account lockout after failed sign-ins"
+      ],
+      "characteristics": [
+        "Names the cause before the steps: something else is retrying the old password",
+        "Says to sign in on the laptop first, not the phone"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The runbook's step 4 is this exact fact pattern - a second lockout inside the hour means a cached credential is retrying, not the user. He is blocked with no workaround, so P2. The same runbook sends repeat lockouts to security when there is no cached-credential source, or when several people lock out at once; neither holds here, so this is not security-sensitive (G3). Contrast case-081, where it is."
+}

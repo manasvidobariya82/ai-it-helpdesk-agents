@@ -1,0 +1,81 @@
+{
+  "id": "case-086",
+  "title": "Someone rang claiming to be IT and asked her to install a remote tool",
+  "scenarios": [
+    "security",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Priya Shah",
+      "email": "priya.shah@northgate.example",
+      "department": "Finance",
+      "role": "Financial Controller",
+      "vip": true
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0114, last seen 2026-09-19 08:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Odd phone call from 'IT'",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Somebody rang about twenty minutes ago saying he was from IT and that my laptop\nwas sending out spam. He wanted me to go to a website and install something\ncalled AnyDesk so he could clear it.\n\nI did not do it and I hung up. He knew my name and that I am in Finance.\n\nWorth telling you about?\n\nPriya",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "security_incident",
+      "priority": "P2",
+      "subcategory": "attempted social engineering by phone",
+      "is_security_sensitive": true,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "An attempted social-engineering call against a named finance user; security decides whether anyone else was called.",
+      "rules": [
+        "security_sensitive"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Nothing happened, and it still goes to a person. Two independent reasons converge: an attempted compromise is security-sensitive under G3, which forces at least P2 even though her work is entirely unaffected, and she is a VIP with vip_always_human on (G5). The expected rule is security_sensitive because rule 2 sits above the VIP rule at 4 - so this case cannot be used as evidence that the VIP rule works, which is what case-093 is for. The detail worth keeping is that he knew her name and department: that is a targeted call, and a targeted call against the Financial Controller is the opening move of an invoice fraud."
+}

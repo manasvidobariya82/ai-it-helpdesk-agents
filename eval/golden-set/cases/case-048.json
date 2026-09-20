@@ -1,0 +1,87 @@
+{
+  "id": "case-048",
+  "title": "VIP asks 'is email down?' during the incident",
+  "scenarios": [
+    "known_incident",
+    "vip"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Priya Shah",
+      "email": "priya.shah@northgate.example",
+      "department": "Finance",
+      "role": "Financial Controller",
+      "vip": true
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0114, last seen 2026-09-19 08:02)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0917-EXO",
+        "priority": "P1",
+        "subject": "MAJOR: Exchange Online mail delivery delayed for all users"
+      }
+    ],
+    "subject": "Is email down?",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Nothing has come into my inbox for about an hour and I'm expecting the auditors' figures. Is email down?\n\nPriya",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "mail delivery delay",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": "INC-0917-EXO",
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Tenant policy sends VIPs to a person, even with a known incident to link.",
+      "rules": [
+        "vip_requester"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The same duplicate as case 047, from a VIP. The VIP rule runs before the known-incident rule in decide.ts, so a person answers; linking would be the right outcome for anybody else."
+}

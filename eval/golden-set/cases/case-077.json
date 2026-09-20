@@ -1,0 +1,116 @@
+{
+  "id": "case-077",
+  "title": "VPN dropping during the concentrator incident",
+  "scenarios": [
+    "known_incident",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0920-VPN",
+        "priority": "P1",
+        "subject": "MAJOR: VPN concentrator degraded, sessions dropping"
+      }
+    ],
+    "subject": "VPN keeps dropping me",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "GlobalProtect connects and then drops me after a minute or two, over and over.\nIt has done it about ten times since nine.\n\nSame on the hotspot, so it is not my home wifi.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "VPN sessions dropping",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": "INC-0920-VPN",
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "VPN will not connect (GlobalProtect)"
+      ]
+    },
+    "handling": {
+      "action": "link_incident",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "known_incident"
+      ]
+    },
+    "answer": {
+      "kind": "incident_ack",
+      "must_include": [
+        {
+          "id": "tracking",
+          "what": "Says it is already known and being tracked",
+          "any_of": [
+            "already tracking",
+            "known issue",
+            "already aware"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-runbook",
+          "what": "Walks her through the VPN runbook during a concentrator outage",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s",
+            "portal address",
+            "disable.{0,20}enable"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "'Disconnects a few seconds after connecting' is a symptom the VPN runbook lists, which is why the runbook is labelled irrelevant rather than left out: it will score well and it is the wrong answer today (G10). She has already eliminated her own network. Blocked from internal systems, so P2, linked to the P1 (G11)."
+}

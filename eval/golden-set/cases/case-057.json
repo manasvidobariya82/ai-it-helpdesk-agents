@@ -1,0 +1,83 @@
+{
+  "id": "case-057",
+  "title": "Warehouse scanner account, which the password runbook excludes",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Scanner won't take the depot login",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The handheld in goods-in will not accept the depot login this morning. I have\ntried it on the spare handheld as well and it does the same, so it is not the\ndevice. Nothing has changed at our end.\n\nI cannot book any of today's deliveries in until this works and I am the only\none receipting today.\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "warehouse scanner local account",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Password reset and expiry (Entra ID)",
+        "Account lockout after failed sign-ins"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Scanner accounts are local device accounts and are handled outside the Entra ID runbooks.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The password runbook's Scope section says in as many words that it does not cover the warehouse scanner accounts, which are local device accounts covered separately - and there is no such runbook in the pinned set. This is the near miss worth having: every word of the ticket points at the two access runbooks and neither applies (G10). Blocked with no workaround and nobody else to do the receipting, so P2 (G1)."
+}

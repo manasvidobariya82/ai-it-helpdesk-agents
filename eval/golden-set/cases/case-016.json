@@ -1,0 +1,110 @@
+{
+  "id": "case-016",
+  "title": "'Not working again' a week after a Teams ticket",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [
+      "2026-09-12 [closed] email_collab: Teams call audio cuts out"
+    ],
+    "incidents": [],
+    "subject": "not working again",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Same problem as last week, it's not working again.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "repeat of an earlier problem",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "What is not working — the Teams call audio from last week's ticket, or something else"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [
+        "Teams call audio problems"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [
+        "clarify"
+      ],
+      "escalation_required": false,
+      "escalation_reason": "A problem back a week after the agent's fix means the fix did not hold; a person should look.",
+      "rules": []
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "confirm-teams",
+          "what": "Asks whether it is the Teams audio problem again",
+          "any_of": [
+            "teams",
+            "audio"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-steps",
+          "what": "Sends the runbook steps that did not work last time",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The recent-tickets context makes Teams audio the likely reading but not a certain one. Either hand it to a person (the earlier fix failed) or ask one question; re-sending last week's steps is the wrong answer either way."
+}

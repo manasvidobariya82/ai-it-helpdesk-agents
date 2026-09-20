@@ -1,0 +1,22 @@
+{
+  "name": "@hd/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@hd/agent-helpdesk": "*",
+    "@hd/core": "*",
+    "@hd/llm": "*",
+    "@hd/rag": "*",
+    "@hd/tools": "*",
+    "bullmq": "^5.34.6",
+    "mailparser": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/mailparser": "^3.4.5"
+  }
+}

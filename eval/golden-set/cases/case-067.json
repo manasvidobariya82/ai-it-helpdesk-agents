@@ -1,0 +1,86 @@
+{
+  "id": "case-067",
+  "title": "Photo of a laptop after a coffee spill",
+  "scenarios": [
+    "attachment"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Spilled coffee on the laptop",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I knocked a cup over on the keyboard about an hour ago. I turned it off and\nturned it upside down on a towel like you are supposed to.\n\nPhoto attached. The bottom two rows of keys feel tacky. I have not turned it\nback on.\n\nMel",
+        "attachments": [
+          {
+            "filename": "IMG_4471.jpg",
+            "content_type": "image/jpeg",
+            "shows": "A laptop keyboard face down on a tea towel, liquid visible around the bottom row of keys and on the trackpad."
+          }
+        ],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P2",
+      "subcategory": "liquid damage",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Liquid damage needs a physical assessment and a loan device; no runbook covers it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The substance is in a photograph the agent cannot read: all it gets is the file name (G10 has nothing to say here because no runbook is close). She has done the right things and stopped, so what she needs is a loan machine and somebody to look at it, which is a person's job. She has no working laptop and no workaround, so P2 (G1)."
+}

@@ -1,0 +1,82 @@
+{
+  "id": "case-065",
+  "title": "Warehouse tablet is slow, and the slowness runbook excludes it",
+  "scenarios": [
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Tablet taking forever",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The stock tablet takes about thirty seconds to open anything and the scanning\napp keeps closing itself. It has been getting worse for a fortnight.\n\nWe can share the one in the office for now but it slows the whole bay down.\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "warehouse tablet performance",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Laptop running slowly"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "The slowness runbook covers company-managed laptops and says it does not apply to the warehouse tablets.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The 'Laptop running slowly' runbook is going to score well here - the words are almost identical - and its Scope section rules the warehouse tablets out. Following it anyway would send an Android tablet user to Task Manager and the recycle bin. There is a workaround, sharing the office tablet, so P3 (G1). The pair with case-057 is the point: two different runbooks, both excluding the warehouse by name, both the top hit for the ticket that excludes them (G10)."
+}

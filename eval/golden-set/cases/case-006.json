@@ -1,0 +1,120 @@
+{
+  "id": "case-006",
+  "title": "Account temporarily locked, password believed correct",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Account locked",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "It says my account has been temporarily locked. I'm sure I'm typing the right password. I need to get into the stock system for the afternoon delivery.\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "smart lockout",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Account lockout after failed sign-ins"
+      ],
+      "acceptable": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "close-mobile",
+          "what": "Close Outlook and Teams on the phone, the usual source of failed attempts",
+          "any_of": [
+            "close",
+            "quit"
+          ]
+        },
+        {
+          "id": "wait",
+          "what": "Wait out the lockout window, which starts from the last failed attempt",
+          "any_of": [
+            "wait",
+            "60 seconds",
+            "a minute"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-reset",
+          "what": "Tells him to reset the password; the password is not the problem",
+          "any_of": [
+            "reset (your|the) password",
+            "aka\\.ms/sspr"
+          ]
+        }
+      ],
+      "cites": [
+        "Account lockout after failed sign-ins"
+      ],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Blocked from the system he needs, no workaround: P2. The lockout runbook, not the password runbook: a stale credential retrying in the background is the usual cause, and a reset leaves that source in place."
+}

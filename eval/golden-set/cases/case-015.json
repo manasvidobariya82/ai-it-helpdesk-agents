@@ -1,0 +1,112 @@
+{
+  "id": "case-015",
+  "title": "'Laptop playing up' from someone whose only device is a tablet",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/04-laptop-slow.eml"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": "tablet Android 14 (tag NG-TB-0019, last seen 2026-09-07 11:20)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "laptop playing up",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "its being really slow again. can someone have a look\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "slowness, device unclear",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "Which device it is (asset tag) — the record shows a warehouse tablet, not a laptop",
+        "Whether it is slow all the time or in one application, and since when"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [
+        "Laptop running slowly"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "which-device",
+          "what": "Asks which device, or for its asset tag",
+          "any_of": [
+            "which (device|laptop|tablet)",
+            "asset tag",
+            "tablet"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-steps",
+          "what": "Gives troubleshooting steps instead of asking",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [
+        "One question, at most two sentences"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The only device on record is a warehouse tablet, and the laptop runbook says it does not apply to those. Guessing which device and sending laptop steps is how a runbook reply goes wrong. One question first."
+}

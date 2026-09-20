@@ -1,0 +1,136 @@
+{
+  "id": "case-033",
+  "title": "Draft jumped to a hardware refresh; the edit went back to the basics",
+  "scenarios": [
+    "draft_edited",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Laptop slow since yesterday's update",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Since the update installed yesterday afternoon my laptop has been crawling — even opening File Explorer takes ages. It was fine before.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "draft",
+        "visibility": "internal",
+        "body": "Your laptop may be due for replacement. I've raised a hardware refresh request.\n\n1. Empty your Downloads folder.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "public",
+        "body": "1. Restart the laptop fully (Start, Power, Restart), not sleep.\n2. After it restarts, open Settings, then Windows Update, and check whether an update is still downloading or waiting to install. Let it finish.\n3. Check free space on the C: drive. Under 10% free causes exactly this.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": 2,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "slow after update",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Laptop running slowly"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "restart",
+          "what": "A full restart",
+          "any_of": [
+            "restart"
+          ]
+        },
+        {
+          "id": "windows-update",
+          "what": "Check whether Windows Update is still downloading or installing",
+          "any_of": [
+            "windows update",
+            "update (is )?(still )?(downloading|installing|in progress)"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-refresh",
+          "what": "Raises or promises a hardware refresh",
+          "any_of": [
+            "refresh",
+            "replac(e|ement)",
+            "new laptop"
+          ]
+        }
+      ],
+      "cites": [
+        "Laptop running slowly"
+      ],
+      "characteristics": [],
+      "reference": "1. Restart the laptop fully (Start, Power, Restart), not sleep.\n2. After it restarts, open Settings, then Windows Update, and check whether an update is still downloading or waiting to install. Let it finish.\n3. Check free space on the C: drive. Under 10% free causes exactly this.\n\n— Northgate IT Support"
+    },
+    "must_not_appear": []
+  },
+  "rationale": "'Since the update' points at runbook step 4 (an update mid-download) and step 1. A refresh is the runbook's last step for old devices; the draft also claimed an action ('I've raised…') that nobody took."
+}

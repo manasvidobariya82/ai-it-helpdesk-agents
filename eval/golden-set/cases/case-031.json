@@ -1,0 +1,144 @@
+{
+  "id": "case-031",
+  "title": "Draft invented a reset page and a timeline; the sent reply removed both",
+  "scenarios": [
+    "draft_edited",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Password expired - phone won't accept new one",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "My password expired, I've set a new one on the laptop, but my phone's Outlook keeps rejecting it.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "draft",
+        "visibility": "internal",
+        "body": "Sorry to hear that.\n\n1. Go to password.northgate.example and reset your password again.\n2. Wait for IT to sync your account, which takes up to 30 minutes.\n3. Restart your phone.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "public",
+        "body": "1. On your phone, sign out of Outlook and Teams.\n2. Sign back in with the new password you set on the laptop.\n\nThe phone keeps the old password until you sign out, so there is no need to reset it again.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": 2,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P3",
+      "subcategory": "cached password on phone after expiry",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "acceptable": [
+        "Account lockout after failed sign-ins"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "phone-signout",
+          "what": "Sign out of Outlook (and Teams) on the phone, then sign back in with the new password",
+          "any_of": [
+            "sign(ing)? (back )?out",
+            "remove (the |your )?(work )?account"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "invented-portal",
+          "what": "Sends him to a reset page that does not exist",
+          "any_of": [
+            "password\\.northgate\\.example"
+          ]
+        },
+        {
+          "id": "invented-wait",
+          "what": "Promises a sync time no runbook gives",
+          "any_of": [
+            "30 minutes",
+            "up to \\d+ (minutes|hours)"
+          ]
+        },
+        {
+          "id": "reset-again",
+          "what": "Tells him to reset the password again",
+          "any_of": [
+            "reset (your|the) password again"
+          ]
+        }
+      ],
+      "cites": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "characteristics": [],
+      "reference": "1. On your phone, sign out of Outlook and Teams.\n2. Sign back in with the new password you set on the laptop.\n\nThe phone keeps the old password until you sign out, so there is no need to reset it again.\n\n— Northgate IT Support"
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The label is what the person sent, not what the agent drafted. The draft invented a URL and a timeline (both forbidden by the reply prompt) and sent him through a second reset; the edit kept only the runbook's step 5."
+}

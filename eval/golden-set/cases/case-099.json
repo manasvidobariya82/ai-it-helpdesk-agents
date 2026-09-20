@@ -1,0 +1,81 @@
+{
+  "id": "case-099",
+  "title": "VIP asks about the boardroom projector",
+  "scenarios": [
+    "vip",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Greg Lin",
+      "email": "greg.lin@northgate.example",
+      "department": "Executive",
+      "role": "Managing Director",
+      "vip": true
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0002, last seen 2026-09-19 07:40)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Projector in the boardroom",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The projector in the boardroom drops out every few minutes - it did it twice\nduring the finance review. Board meeting is Thursday.\n\nCan somebody look at it before then?\n\nGreg",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "other",
+      "priority": "P3",
+      "subcategory": "meeting room equipment",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Tenant policy routes VIP requesters straight to a person, and room equipment needs somebody in the room.",
+      "rules": [
+        "vip_requester"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "A named deadline from the managing director, and it is still P3: the meetings happen, the projector mostly works, and nobody is stopped from doing their job (G1). Thursday is the sort of detail that pulls a priority upward if the classifier is reading tone rather than impact. Meeting-room hardware belongs to no category in the taxonomy, which is what other is for."
+}

@@ -1,0 +1,80 @@
+{
+  "id": "case-039",
+  "title": "Password entered on a phishing page ten minutes ago",
+  "scenarios": [
+    "security"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/02-phishing-report.eml"
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "I think I clicked something I shouldn't have",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Hi,\n\nI got an email that looked like it was from Greg asking me to check a payroll\nsummary. I clicked the link and it took me to a Microsoft sign-in page so I\nput my password in. It then said the page had expired and nothing happened,\nwhich is when I thought it looked wrong.\n\nThat was about ten minutes ago. I haven't touched anything since.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "security_incident",
+      "priority": "P1",
+      "subcategory": "credential phishing, password entered",
+      "is_security_sensitive": true,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "oncall"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A likely credential compromise in progress.",
+      "rules": [
+        "security_sensitive"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "She typed her password into a fake Microsoft page: a confirmed credential compromise, which the priority definitions name as P1. On-call, now."
+}

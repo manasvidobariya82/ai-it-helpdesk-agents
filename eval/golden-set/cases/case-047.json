@@ -1,0 +1,112 @@
+{
+  "id": "case-047",
+  "title": "Late email during the Exchange incident",
+  "scenarios": [
+    "known_incident"
+  ],
+  "origin": {
+    "kind": "seed_email",
+    "ref": "db/seed/emails/05-mail-delayed.eml"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0917-EXO",
+        "priority": "P1",
+        "subject": "MAJOR: Exchange Online mail delivery delayed for all users"
+      }
+    ],
+    "subject": "Emails arriving really late",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "A client just rang me about a quote they sent at 9am and it only landed in my\ninbox two minutes ago. Same with a couple of internal ones. Is something up\nwith the mail server?\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "mail delivery delay",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": "INC-0917-EXO",
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Teams call audio problems"
+      ]
+    },
+    "handling": {
+      "action": "link_incident",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "known_incident"
+      ]
+    },
+    "answer": {
+      "kind": "incident_ack",
+      "must_include": [
+        {
+          "id": "tracking",
+          "what": "Says the issue is already being tracked",
+          "any_of": [
+            "already tracking",
+            "known issue"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-steps",
+          "what": "Sends troubleshooting steps for a vendor outage",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Exactly the failure in the open incident. For him it is a delay, not an outage: P3, linked to the P1 rather than opening the fortieth duplicate."
+}

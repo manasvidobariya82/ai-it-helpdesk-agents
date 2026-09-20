@@ -1,0 +1,124 @@
+{
+  "id": "case-062",
+  "title": "Teams stuck sending during an open vendor incident",
+  "scenarios": [
+    "known_incident",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0920-TEAMS",
+        "priority": "P1",
+        "subject": "MAJOR: Microsoft Teams chat and calls degraded (vendor incident)"
+      }
+    ],
+    "subject": "Teams messages won't send",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Teams has been hopeless since about nine. Messages sit with the little clock on\nthem and two calls have dropped. Chat to my own team, so nothing unusual.\n\nEmail is fine.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams chat and calls degraded",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": "INC-0920-TEAMS",
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Teams call audio problems"
+      ]
+    },
+    "handling": {
+      "action": "link_incident",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "known_incident"
+      ]
+    },
+    "answer": {
+      "kind": "incident_ack",
+      "must_include": [
+        {
+          "id": "tracking",
+          "what": "Says the problem is already known and being tracked",
+          "any_of": [
+            "already tracking",
+            "known issue",
+            "already aware"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-steps",
+          "what": "Sends device troubleshooting for a vendor outage",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s",
+            "test call",
+            "cache"
+          ]
+        },
+        {
+          "id": "no-eta",
+          "what": "Invents a restoration time",
+          "any_of": [
+            "by \\d+ ?(am|pm)",
+            "within (the )?(next )?\\d+ (minutes|hours)"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The same failure as the open incident, not merely a similar one, so it links (G11). Email still works and he can walk to a desk, so for him it is P3 under a P1 parent. The Teams audio runbook is the trap: it is the closest document by vocabulary and it would have him clearing caches and picking headset devices in the middle of a vendor outage (G10)."
+}

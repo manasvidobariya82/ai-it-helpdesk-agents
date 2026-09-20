@@ -1,0 +1,80 @@
+{
+  "id": "case-054",
+  "title": "Backfilled API smoke-test ticket",
+  "scenarios": [
+    "legacy"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "Smoke test from the REST API"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "api",
+    "requester": {
+      "name": null,
+      "email": "api-smoke-test@northgate.example",
+      "department": null,
+      "role": null,
+      "vip": false
+    },
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Smoke test from the REST API",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Created by the post-implementation smoke test.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "other",
+      "priority": "P4",
+      "subcategory": "test ticket",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Not a request from a person; somebody at the desk closes it.",
+      "rules": [
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Nothing to classify or answer. It must not attract a runbook reply."
+}

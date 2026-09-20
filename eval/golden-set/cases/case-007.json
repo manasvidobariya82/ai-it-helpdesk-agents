@@ -1,0 +1,83 @@
+{
+  "id": "case-007",
+  "title": "VIP with a Teams audio problem the runbook covers",
+  "scenarios": [
+    "straightforward",
+    "vip"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Greg Lin",
+      "email": "greg.lin@northgate.example",
+      "department": "Executive",
+      "role": "Managing Director",
+      "vip": true
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0002, last seen 2026-09-19 07:40)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Teams audio keeps cutting out",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "My audio keeps cutting out on Teams calls this week. Board call on Thursday so would like it fixed.\n\nGreg",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams audio",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Teams call audio problems"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Tenant policy sends every VIP ticket to a person, however routine.",
+      "rules": [
+        "vip_requester"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The runbook would answer this, and the agent still must not: vip_always_human is on for this tenant (G5). Degraded, not blocked, so P3 even for a VIP — the VIP clause of P1 is for a VIP who cannot work at all."
+}

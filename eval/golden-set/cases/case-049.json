@@ -1,0 +1,89 @@
+{
+  "id": "case-049",
+  "title": "Teams calls down for a whole team — not the open Exchange incident",
+  "scenarios": [
+    "technical",
+    "known_incident"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [
+      {
+        "id": "INC-0917-EXO",
+        "priority": "P1",
+        "subject": "MAJOR: Exchange Online mail delivery delayed for all users"
+      }
+    ],
+    "subject": "Teams calls failing for the whole sales team",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Since about 10am none of the sales team can join or make Teams calls — it just says 'We couldn't connect the call'. Chat still works. Mail is fine as far as I can tell. We have client calls all afternoon.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P1",
+      "subcategory": "Teams calling outage for a team",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "oncall"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [
+        "Teams call audio problems"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A service is down for several people.",
+      "rules": [
+        "priority_p1"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Service down for multiple people: P1, on-call. The only open incident is Exchange mail, a different failure; linking to it on the strength of 'Microsoft 365' would be the vague-similarity guess the triage prompt forbids."
+}

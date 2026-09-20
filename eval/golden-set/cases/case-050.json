@@ -1,0 +1,112 @@
+{
+  "id": "case-050",
+  "title": "Backfilled ticket: 'Can't sign in to the CRM', one line",
+  "scenarios": [
+    "legacy",
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "Can't sign in to the CRM"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Can't sign in to the CRM",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Can't sign in to the CRM. Reported by tom.reed@northgate.example.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "sign-in failure, detail missing",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "The message shown when sign-in fails"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [
+        "Password reset and expiry (Entra ID)",
+        "Account lockout after failed sign-ins"
+      ],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "error",
+          "what": "Asks what happens or what message appears",
+          "any_of": [
+            "error",
+            "message",
+            "what (happens|do you see)"
+          ]
+        }
+      ],
+      "must_not_include": [],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": [
+      {
+        "id": "email",
+        "text": "tom.reed@northgate.example",
+        "in": [
+          "model_input"
+        ],
+        "why": "email addresses are redacted before model calls"
+      }
+    ]
+  },
+  "rationale": "A pre-conversation ticket whose whole body is the subject plus a 'reported by' line. Blocked from the CRM: P2. Nothing says why, so ask. The seeded history labels it access_identity/P2 as well."
+}

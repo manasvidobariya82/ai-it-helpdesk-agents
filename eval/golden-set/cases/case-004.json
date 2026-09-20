@@ -1,0 +1,118 @@
+{
+  "id": "case-004",
+  "title": "Laptop slow all week, never restarted",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Laptop really slow all week",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "My laptop has been slow all week — everything takes ages to open and the fan is going constantly. I honestly can't remember the last time I restarted it, I just close the lid.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "general slowness, long uptime",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Laptop running slowly"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "restart",
+          "what": "A full restart, not sleep or closing the lid",
+          "any_of": [
+            "restart"
+          ]
+        },
+        {
+          "id": "disk-space",
+          "what": "Check free disk space",
+          "any_of": [
+            "disk space",
+            "free (up )?space",
+            "storage"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-replacement",
+          "what": "Raises or promises a replacement before the basics are tried",
+          "any_of": [
+            "replac(e|ement)",
+            "hardware refresh",
+            "new laptop"
+          ]
+        }
+      ],
+      "cites": [
+        "Laptop running slowly"
+      ],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The runbook's first step is the whole likely fix: uptime over a fortnight is 'frequently the whole problem'. She can work, slowly: P3. A refresh is the runbook's last resort for old devices, and nothing here says the device is old."
+}

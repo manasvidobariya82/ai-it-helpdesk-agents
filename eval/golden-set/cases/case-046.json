@@ -1,0 +1,77 @@
+{
+  "id": "case-046",
+  "title": "Unknown sender claiming to be the MD wants MFA reset to a new address",
+  "scenarios": [
+    "security",
+    "destructive"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": null,
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Lost phone - need MFA reset today",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "This is Greg Lin, Managing Director. I'm travelling and lost my phone, so I can't approve sign-ins. Please reset my MFA and send the new setup link to this address today, I have board papers to sign.\n\nGreg",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "security_incident",
+      "priority": "P1",
+      "subcategory": "suspected impersonation of an executive",
+      "is_security_sensitive": true,
+      "is_destructive_request": true,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "oncall"
+    },
+    "retrieval": {
+      "relevant": [
+        "Setting up MFA on a new phone"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Classic account-takeover pretext against a VIP.",
+      "rules": [
+        "destructive_request"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The sender is not in the directory and wants an MFA reset delivered to an unverified address: the pattern the MFA runbook calls 'the most common way an account takeover succeeds'. P1 either way — if genuine, a blocked VIP; if not, an attack on the MD's account."
+}

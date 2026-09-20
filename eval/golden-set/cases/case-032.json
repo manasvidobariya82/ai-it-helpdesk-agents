@@ -1,0 +1,134 @@
+{
+  "id": "case-032",
+  "title": "Draft gave a Windows cache path to a Mac user; the edit fixed the device",
+  "scenarios": [
+    "draft_edited",
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Robotic audio on Teams",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "On Teams calls my voice comes through robotic according to everyone else. Using AirPods on my MacBook.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "draft",
+        "visibility": "internal",
+        "body": "1. Quit Teams.\n2. Delete the contents of %appdata%\\Microsoft\\Teams\\Cache.\n3. Reopen Teams.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "public",
+        "body": "1. In Teams, open Settings, then Devices, and run \"Make a test call\".\n2. Check which device is selected for speaker and microphone. AirPods can appear twice; pick the Hands-Free entry for calls.\n3. If it only happens on wifi, try the 5GHz network or a cable.\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": 2,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P3",
+      "subcategory": "Teams audio quality, Bluetooth",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Teams call audio problems"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "test-call",
+          "what": "Run 'Make a test call' and check the selected devices",
+          "any_of": [
+            "test call"
+          ]
+        },
+        {
+          "id": "hands-free",
+          "what": "Pick the Hands-Free entry for Bluetooth earbuds",
+          "any_of": [
+            "hands-?free"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "windows-path",
+          "what": "Gives the Windows cache path to a Mac user",
+          "any_of": [
+            "%appdata%",
+            "\\\\Microsoft\\\\Teams"
+          ]
+        }
+      ],
+      "cites": [
+        "Teams call audio problems"
+      ],
+      "characteristics": [],
+      "reference": "1. In Teams, open Settings, then Devices, and run \"Make a test call\".\n2. Check which device is selected for speaker and microphone. AirPods can appear twice; pick the Hands-Free entry for calls.\n3. If it only happens on wifi, try the 5GHz network or a cable.\n\n— Northgate IT Support"
+    },
+    "must_not_appear": []
+  },
+  "rationale": "The runbook only gives the Windows cache path; the device line says macOS. The draft copied the one step that does not apply and skipped the Bluetooth step that does."
+}

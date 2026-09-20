@@ -1,0 +1,131 @@
+{
+  "id": "case-055",
+  "title": "Mac user caught by the 90-day expiry with no warning",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Password not accepted on anything since this morning",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Since I opened the laptop this morning nothing takes my password. Mail,\nTeams, the build server, all of it says the password is wrong. It is the same\npassword I have used since June and I have not changed it.\n\nI did not get any warning that it was about to expire.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "expired password, macOS",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "acceptable": [],
+      "irrelevant": [
+        "Account lockout after failed sign-ins"
+      ]
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "sspr",
+          "what": "Send her to the self-service reset at aka.ms/sspr",
+          "any_of": [
+            "aka\\.ms/sspr",
+            "self-?service (password )?reset"
+          ]
+        },
+        {
+          "id": "rules",
+          "what": "State the new password rules: at least 14 characters, not one of the last 5",
+          "any_of": [
+            "14 characters",
+            "last 5"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-lockout",
+          "what": "Treats it as a lockout and tells her to wait for the window to clear",
+          "any_of": [
+            "(smart )?lockout",
+            "60 seconds",
+            "wait (an? )?(hour|minute)"
+          ]
+        },
+        {
+          "id": "no-warning-claim",
+          "what": "Claims she was warned 14 days beforehand; macOS does not show that warning",
+          "any_of": [
+            "you (were|should have been) warned",
+            "14 days.{0,3} (notice|warning)"
+          ]
+        }
+      ],
+      "cites": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "characteristics": [
+        "Two or three steps; the cause is known, so no diagnosis",
+        "Explains that macOS does not show the expiry warning, which is why it was a surprise"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Ninety days after June is the expiry window, and the runbook's own note says the 14-day warning appears on Windows sign-in but not on macOS - which is why Mac users are the ones caught out. She cannot sign in to anything and has no workaround, so P2 (G1). A password that expired on schedule is a control working, not an exposure, so not security-sensitive (G3). The lockout runbook shares every word of her symptom and would send her off to wait out a window that is not running (G10)."
+}

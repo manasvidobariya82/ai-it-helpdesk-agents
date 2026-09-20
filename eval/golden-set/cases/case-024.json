@@ -1,0 +1,115 @@
+{
+  "id": "case-024",
+  "title": "VIP laptop with a lifting trackpad, internal note on warranty",
+  "scenarios": [
+    "multi_turn",
+    "internal_note",
+    "vip"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Greg Lin",
+      "email": "greg.lin@northgate.example",
+      "department": "Executive",
+      "role": "Managing Director",
+      "vip": true
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0002, last seen 2026-09-19 07:40)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Laptop trackpad lifting up",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "The trackpad on my MacBook has started lifting at the front and the case doesn't sit flat on the desk any more. Still works. Board pack due Friday.\n\nGreg",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "staff",
+        "kind": "message",
+        "visibility": "internal",
+        "body": "Almost certainly a swollen battery — he must stop using it and keep it unplugged. NG-MB-0002 is out of warranty; a replacement needs finance sign-off, so don't promise one yet.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Do I need to do anything in the meantime?",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 3,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P2",
+      "subcategory": "suspected swollen battery",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "A swelling battery is a fire risk, and the requester is a VIP.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": [
+      {
+        "id": "warranty",
+        "text": "out of warranty",
+        "in": [
+          "answer"
+        ],
+        "why": "internal note, not for the requester"
+      },
+      {
+        "id": "finance",
+        "text": "finance sign-off",
+        "in": [
+          "answer"
+        ],
+        "why": "internal note, not for the requester"
+      }
+    ]
+  },
+  "rationale": "A lifting trackpad on a MacBook is the classic sign of a swollen battery, which is a safety issue: P2 even though he says it still works. VIP policy sends it to a person regardless. The answer to his question is 'stop using it', and it must come without the warranty discussion."
+}

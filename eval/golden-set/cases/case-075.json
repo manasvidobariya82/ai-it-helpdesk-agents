@@ -1,0 +1,120 @@
+{
+  "id": "case-075",
+  "title": "GlobalProtect pointed at the old portal address",
+  "scenarios": [
+    "straightforward",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "VPN says network error",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "GlobalProtect will not connect from home - it tries for a while and then says\n'Network error'. My home internet is fine, I am on a video call on the same\nwifi right now.\n\nThe portal box says vpn.northgate-services.example, which is what I have always\nhad in there.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "network_connectivity",
+      "priority": "P2",
+      "subcategory": "wrong VPN portal address",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "reply",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "confident_with_runbook"
+      ]
+    },
+    "answer": {
+      "kind": "reply",
+      "must_include": [
+        {
+          "id": "portal",
+          "what": "Give the correct portal address, vpn.northgate.example",
+          "any_of": [
+            "vpn\\.northgate\\.example"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-cert",
+          "what": "Sends her to IT for a certificate reissue, which is a different error",
+          "any_of": [
+            "certificate"
+          ]
+        },
+        {
+          "id": "no-captive",
+          "what": "Blames a captive portal when she has said her wifi works",
+          "any_of": [
+            "captive portal",
+            "hotel",
+            "cafe|caf\\u00e9"
+          ]
+        }
+      ],
+      "cites": [
+        "VPN will not connect (GlobalProtect)"
+      ],
+      "characteristics": [
+        "Leads with the portal address: step 1 of the runbook, and she has quoted the wrong one",
+        "One correction, not the whole five-step list"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "She has put the answer in the ticket without knowing it. Step 1 of the VPN runbook calls a wrong or old portal address the single most common cause, and the address she quotes is not the one the runbook gives. Remote and cut off from everything internal with no workaround, so P2 (G1). The two must_not_include entries are the runbook's other branches, both of which would send her somewhere useless."
+}

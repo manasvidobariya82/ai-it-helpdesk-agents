@@ -1,0 +1,121 @@
+{
+  "id": "case-068",
+  "title": "'It keeps switching itself off', no device on record",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Dan Osei",
+      "email": "dan.osei@northgate.example",
+      "department": "Operations",
+      "role": "Warehouse Supervisor",
+      "vip": false
+    },
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Keeps switching off",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "It keeps switching itself off. Third time today.\n\nDan",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "hardware",
+      "priority": "P3",
+      "subcategory": "unexplained shutdowns",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "Which device this is",
+        "Whether it is on mains power or battery when it happens",
+        "Whether it shuts down cleanly or cuts out"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Laptop running slowly"
+      ]
+    },
+    "handling": {
+      "action": "clarify",
+      "also_acceptable": [],
+      "escalation_required": false,
+      "escalation_reason": null,
+      "rules": [
+        "missing_info"
+      ]
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "which-device",
+          "what": "Ask which device it is",
+          "any_of": [
+            "which (device|machine|laptop|tablet)",
+            "what (device|machine)"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-guess",
+          "what": "Assumes it is the laptop, or any device at all",
+          "any_of": [
+            "your laptop",
+            "the laptop"
+          ]
+        },
+        {
+          "id": "no-fix",
+          "what": "Offers a fix before knowing what the device is",
+          "any_of": [
+            "(^|\\n)\\s*1[.)]\\s"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [
+        "One message, asking for the facts nobody can act without",
+        "Does not assume the device: nothing is on record for him here"
+      ],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "Three sentences, no device on record and no device named, so nobody can act (G7). The shape matters: the missing facts are things he can answer in a line each, not 'more details'. He keeps working between shutdowns, so P3. Against case-015, where the stated device contradicts the record, this is the simpler case where there is no record at all."
+}

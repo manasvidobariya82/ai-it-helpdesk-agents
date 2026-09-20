@@ -1,0 +1,85 @@
+{
+  "id": "case-081",
+  "title": "Three people in one team locked out inside an hour",
+  "scenarios": [
+    "security",
+    "technical"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Mel Hartley",
+      "email": "mel.hartley@northgate.example",
+      "department": "HR",
+      "role": "HR Manager",
+      "vip": false
+    },
+    "device": "laptop Windows 11 22H2 (tag NG-LT-0188, last seen 2026-09-16 17:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Three of us locked out this morning",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Three people in my team have been locked out since about half eight - me, Sara\nand Joe. Different laptops, different floors, and Joe has been off all week so\nhe has not touched anything.\n\nNone of us has changed a password recently.\n\nMel",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "security_incident",
+      "priority": "P2",
+      "subcategory": "multiple simultaneous lockouts",
+      "is_security_sensitive": true,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Account lockout after failed sign-ins"
+      ],
+      "acceptable": [],
+      "irrelevant": [
+        "Password reset and expiry (Entra ID)"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Lockouts affecting several people at once are treated as a possible password-spray attempt and go to security.",
+      "rules": [
+        "security_sensitive"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The lockout runbook is retrieved, is the right runbook, and its 'When to escalate' section is the whole answer: more than one person locked out at once is a possible password-spray attempt and goes to security rather than to the desk (G6). Joe having been away all week is the detail that rules out the cached-credential explanation that makes case-056 routine. Security-sensitive under G3, which forces at least P2; a reviewer who reads three blocked people plus a suspected attack as P1 has a case, and the difference matters because P1 routes to oncall."
+}

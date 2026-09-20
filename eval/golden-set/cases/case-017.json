@@ -1,0 +1,109 @@
+{
+  "id": "case-017",
+  "title": "Vague request for production cloud access",
+  "scenarios": [
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Access to AWS prod",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Can I get access to the AWS prod account? Need to look at something for the release.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P4",
+      "subcategory": "privileged access request",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "Which role or level of access, and for how long",
+        "Who approves it (line manager or system owner)"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [
+        "clarify"
+      ],
+      "escalation_required": false,
+      "escalation_reason": "Production access is a privileged grant that needs an approver; there is no runbook and the agent cannot grant it.",
+      "rules": []
+    },
+    "answer": {
+      "kind": "question",
+      "must_include": [
+        {
+          "id": "scope-or-approver",
+          "what": "Asks what access is needed or who approves it",
+          "any_of": [
+            "approv",
+            "role",
+            "read",
+            "how long"
+          ]
+        }
+      ],
+      "must_not_include": [
+        {
+          "id": "no-grant",
+          "what": "Says access has been or will be granted",
+          "any_of": [
+            "\\b(granted|added you|you now have|have given you)\\b"
+          ]
+        }
+      ],
+      "cites": [],
+      "characteristics": [],
+      "reference": null
+    },
+    "must_not_appear": []
+  },
+  "rationale": "A request, so P4. Granting access is additive, not destructive, but it is privileged and needs an approver — a person owns it. Asking one scoping question first is also fine."
+}

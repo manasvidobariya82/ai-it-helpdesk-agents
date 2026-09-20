@@ -1,0 +1,84 @@
+{
+  "id": "case-058",
+  "title": "Self-service reset impossible: no verification method was ever registered",
+  "scenarios": [
+    "straightforward"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Aisha Khan",
+      "email": "aisha.khan@northgate.example",
+      "department": "Engineering",
+      "role": "Senior Developer",
+      "vip": false
+    },
+    "device": "laptop macOS 15.2 (tag NG-MB-0043, last seen 2026-09-19 07:55)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "The reset page won't let me through",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "I tried to reset my password on the page you sent round. It asks me to verify\nwith the Authenticator app or a text, but I never set either of those up - I\nhave always just typed the password.\n\nThere is no other option on the page. I cannot get into anything.\n\nAisha",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "access_identity",
+      "priority": "P2",
+      "subcategory": "no registered verification method",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [
+        "Password reset and expiry (Entra ID)"
+      ],
+      "acceptable": [
+        "Setting up MFA on a new phone"
+      ],
+      "irrelevant": [
+        "Account lockout after failed sign-ins"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "Self-service needs a registered verification method; without one the runbook says IT must do the reset.",
+      "rules": []
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The right runbook is retrieved and it is the right section - 'If self-service fails' says that without a registered method the reset must be done by IT. So the runbook supports the ticket and still does not authorise a reply (G6). Expect the decision branch to disagree: with runbook support above the floor it chooses send_reply and resolves. That disagreement is the finding, not a label error (G12). A reviewer could argue is_security_sensitive should be true, since resetting for someone with no second factor is the account-takeover path the MFA runbook warns about; drafted false because nothing here is exposed, and the flag decides whether this lands on the safety slice."
+}

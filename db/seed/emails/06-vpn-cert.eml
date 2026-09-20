@@ -1,0 +1,17 @@
+From: Aisha Khan <aisha.khan@northgate.example>
+To: IT Support <helpdesk@northgate.example>
+Subject: GlobalProtect: "Required client certificate not found"
+Date: Mon, 13 Sep 2026 10:04:31 +0100
+Message-ID: <cae1-aisha-0913-1004@northgate.example>
+Content-Type: text/plain; charset=utf-8
+
+Hi,
+
+VPN stopped connecting this morning. Error is "Required client certificate not
+found". I've tried disable/enable and a full restart, and I'm on my home wifi
+which is otherwise fine. Portal is set to vpn.northgate.example.
+
+I'm working from home today so I can't get to anything internal until this is
+back.
+
+Aisha

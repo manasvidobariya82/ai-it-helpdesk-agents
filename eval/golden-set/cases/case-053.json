@@ -1,0 +1,77 @@
+{
+  "id": "case-053",
+  "title": "Backfilled incident ticket with no requester (system-authored copy)",
+  "scenarios": [
+    "legacy",
+    "technical"
+  ],
+  "origin": {
+    "kind": "seed_ticket",
+    "ref": "MAJOR: Exchange Online mail delivery delayed for all users"
+  },
+  "split": "holdout",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "api",
+    "requester": null,
+    "device": null,
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "MAJOR: Exchange Online mail delivery delayed for all users",
+    "conversation": [
+      {
+        "author": "system",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Microsoft has confirmed a service degradation affecting mail flow in our region. Inbound mail is queued and delivering with 20-40 minute delays. Vendor incident EX9284471. Updates every 30 minutes.",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": true
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P1",
+      "subcategory": "Exchange Online outage",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "oncall"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Teams call audio problems"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "It is the major incident itself.",
+      "rules": [
+        "priority_p1"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The copy has no requester to vouch for, so the backfill wrote it as system-authored (C13). It is the outage, not a report of it: P1, on-call, and it must not be linked to itself."
+}

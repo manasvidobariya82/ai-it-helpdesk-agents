@@ -1,0 +1,104 @@
+{
+  "id": "case-061",
+  "title": "Still no error message after the one clarifying round the tenant allows",
+  "scenarios": [
+    "multi_turn",
+    "ambiguous"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-20",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Tom Reed",
+      "email": "tom.reed@northgate.example",
+      "department": "Sales",
+      "role": "Account Executive",
+      "vip": false
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0207, last seen 2026-09-18 16:10)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Emails not sending",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "None of my emails have gone out this morning. They just sit there.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "ai",
+        "kind": "message",
+        "visibility": "public",
+        "body": "What does Outlook show when a message fails to send - is there an error, and\ndoes it happen for every recipient or only some?\n\n— Northgate IT Support",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      },
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "It doesn't really say anything. I press send and it just sits there.\n\nTom",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 3,
+    "clarify_rounds_so_far": 1
+  },
+  "expected": {
+    "triage": {
+      "category": "email_collab",
+      "priority": "P2",
+      "subcategory": "outbound mail not leaving the client",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [
+        "The exact message Outlook shows when a send fails",
+        "Whether it affects every recipient or only some"
+      ],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": [
+        "Teams call audio problems"
+      ]
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "One clarifying round is the tenant's limit and the facts needed to act are still missing.",
+      "rules": [
+        "clarify_exhausted"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "The triage label describes the opening message, where the missing facts are real and unanswered (G2, G7). What moves is the handling: max_clarify_rounds is 1 for this tenant, the round has been spent, and the answer added nothing, so the next step is a person and not a second question (G5). He cannot send mail at all and has no workaround, so P2. Case-020 and case-022 also spend the round and also expect the escalation, but neither names the rule, and `rules` is scored only where a case states it — so until this one, nothing checked the rule that stops a polite agent asking forever. Naming it turned up why: it cannot fire today. Intake deliberately does not re-enqueue triage for a reply on an existing thread, so the agent is invoked once per ticket, sees clarify_count 0, and always takes the asking branch. The harness models that faithfully and reports reply_routes_to_human here, so expect this case's rule check to fail for as long as that holds. The expectation is what should happen, not what does (G12): the day an agent reads replies, this ticket must escalate rather than ask a second time, and this is the case that says so. Note also what the finding means for the setting — with max_clarify_rounds at 1 or more the second branch is unreachable, and at 0 the agent never asks at all, so today the dial has two positions rather than four."
+}

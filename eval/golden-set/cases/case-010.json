@@ -1,0 +1,82 @@
+{
+  "id": "case-010",
+  "title": "VIP: Excel crashes on one macro workbook",
+  "scenarios": [
+    "technical",
+    "vip"
+  ],
+  "origin": {
+    "kind": "synthetic",
+    "ref": null
+  },
+  "split": "train",
+  "label_version": "v1",
+  "review": {
+    "status": "draft",
+    "authored_by": "claude-opus-5 (Claude Code session) — drafted from the runbooks, the triage prompt's definitions and decide.ts, not from system output",
+    "authored_at": "2026-09-19",
+    "reviewed_by": null,
+    "reviewed_at": null,
+    "notes": null
+  },
+  "input": {
+    "channel": "email",
+    "requester": {
+      "name": "Priya Shah",
+      "email": "priya.shah@northgate.example",
+      "department": "Finance",
+      "role": "Financial Controller",
+      "vip": true
+    },
+    "device": "laptop Windows 11 23H2 (tag NG-LT-0114, last seen 2026-09-19 08:02)",
+    "recent_tickets": [],
+    "incidents": [],
+    "subject": "Excel crashes on the month-end workbook",
+    "conversation": [
+      {
+        "author": "requester",
+        "kind": "message",
+        "visibility": "public",
+        "body": "Excel closes itself every time I open the month-end reconciliation workbook (the big one with macros). Other spreadsheets open fine. Month end is Wednesday.\n\nPriya",
+        "attachments": [],
+        "derived_from_turn": null,
+        "legacy": false
+      }
+    ],
+    "evaluate_after_turn": 1,
+    "clarify_rounds_so_far": 0
+  },
+  "expected": {
+    "triage": {
+      "category": "software",
+      "priority": "P3",
+      "subcategory": "Excel crash on one workbook",
+      "is_security_sensitive": false,
+      "is_destructive_request": false,
+      "missing_info": [],
+      "duplicate_of": null,
+      "prompt_injection": false
+    },
+    "routing": {
+      "queue": "tier1"
+    },
+    "retrieval": {
+      "relevant": [],
+      "acceptable": [],
+      "irrelevant": []
+    },
+    "handling": {
+      "action": "escalate",
+      "also_acceptable": [],
+      "escalation_required": true,
+      "escalation_reason": "VIP requester, and no runbook for an application crash.",
+      "rules": [
+        "vip_requester",
+        "no_kb_support"
+      ]
+    },
+    "answer": null,
+    "must_not_appear": []
+  },
+  "rationale": "Other files work, so she is degraded rather than blocked: P3. The deadline is urgency language, which does not raise priority (G1). Either the VIP policy or the missing runbook sends it to a person; both are right."
+}
